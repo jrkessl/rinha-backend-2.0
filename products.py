@@ -22,10 +22,18 @@ def get_products():
     print(2)
     print("resposta é " + str(response.status_code))
 
-    json_string = '{"id": 1, "name": "Joaozinho"}' # cria string com json básico
-    data = json.loads(json_string) # carrega a string no dicionário
-    data["id"] = str(response.status_code) # atualiza valor 
-    updated_json = json.dumps(data) # converte o dicionário para string
+    dicts = [
+        {'id': '2', 'name': 'Joaozinho'}
+    ]
+    updated_json = json.dumps(dicts)
+
+    print(updated_json)
+
+
+    #json_string = '{"id": 1, "name": "Joaozinho"}' # cria string com json básico
+    #data = json.loads(json_string) # carrega a string no dicionário
+    #data["id"] = str(response.status_code) # atualiza valor 
+    #updated_json = json.dumps(data) # converte o dicionário para string
 
     return updated_json, response.status_code
     sys.exit()
