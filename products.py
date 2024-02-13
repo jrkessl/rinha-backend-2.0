@@ -7,16 +7,16 @@ import json
 from flask import Flask, jsonify
 app = Flask(__name__)
 port = int(os.environ.get('PORT', 5000))
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0", port=port)
 
+# quando a request chama na raiz 
 @app.route("/")
 def home():
     return "Hello, this is a Flask Microservice"
 
-if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=port)
-
+# quando a request chama no caminho /products
 @app.route('/products', methods=['GET'])
-
 def get_products():
 
     # Compor resposta
