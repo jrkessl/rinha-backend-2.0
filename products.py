@@ -25,3 +25,26 @@ def get_products():
     ]
     response_json = json.dumps(dicts)
     return response_json, 200
+
+@app.route('/products', methods=['POST'])
+def create_product():
+    print("hello world")
+    # dicts = [
+    #     {'id': '2', 'name': 'POST aqui'}
+    # ]
+    # response_json = json.dumps(dicts)
+    # return response_json, 200
+
+    # Get data from request body
+    data = request.get_json()  
+
+    # Process data
+    return jsonify(data), 201
+
+# curl -X POST \
+#   http://localhost:5000/products \
+#   -H 'Content-Type: application/json' \
+#   -d '{
+#     "name": "Sample Product",
+#     "price": 29.99
+#   }'
