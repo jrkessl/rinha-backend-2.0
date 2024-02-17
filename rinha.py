@@ -85,10 +85,17 @@ def extrato(id):
         return f'Id={id} precisa ser inteiro positivo.\n', 439
 
     # Compor resposta
-    dicts = [
-        {'limite': '999', 'saldo': '999'}
+    saldo = [
+        {'total': '999', 'data': 'aaaaa', 'limite': '999'}
     ]
-    response_json = json.dumps(dicts)
+    transacao1 = [
+        {'valor': '999', 'tipo': 'c', 'descricao': 'aaaaa', 'realizada_em': 'aaaaa'}
+    ]
+    final_dict = [
+        saldo,
+        transacao1
+    ]
+    response_json = json.dumps(final_dict)
     return response_json, 200
 
 # quando a request chama no caminho /products
