@@ -13,7 +13,7 @@ if __name__ == "__main__":
 # quando a request chama na raiz 
 @app.route("/")
 def home():
-    return "Hello world"
+    return "Hello world2"
 
 # quando a request chama no caminho /products
 @app.route('/products', methods=['GET'])
@@ -36,10 +36,3 @@ def create_product():
     # Process data
     return jsonify(data), 200
 
-# curl -X POST \
-#   http://localhost:5000/products \
-#   -H 'Content-Type: application/json' \
-#   -d '{
-#     "name": "Sample Product",
-#     "price": 29.99
-#   }'
