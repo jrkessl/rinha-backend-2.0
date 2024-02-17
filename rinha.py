@@ -98,24 +98,24 @@ def extrato(id):
     response_json = json.dumps(final_dict)
     return response_json, 200
 
-# quando a request chama no caminho /products
-@app.route('/products', methods=['GET'])
-def get_products():
+# # quando a request chama no caminho /products
+# @app.route('/products', methods=['GET'])
+# def get_products():
 
-    # Compor resposta
-    dicts = [
-        {'id': '2', 'name': 'Joaozinho'}
-    ]
-    response_json = json.dumps(dicts)
-    return response_json, 200
+#     # Compor resposta
+#     dicts = [
+#         {'id': '2', 'name': 'Joaozinho'}
+#     ]
+#     response_json = json.dumps(dicts)
+#     return response_json, 200
 
-@app.route('/products', methods=['POST'])
-def create_product():
-    print("hello world")
+# @app.route('/products', methods=['POST'])
+# def create_product():
+#     print("hello world")
 
-    # Get data from request body
-    data = request.get_json()  
+#     # Get data from request body
+#     data = request.get_json()  
 
-    # Process data
-    return jsonify(data), 200
+#     # Process data
+#     return jsonify(data), 200
 

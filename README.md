@@ -1,12 +1,16 @@
-Comandos:
-- pip3 install virtualenv
-- virtualenv meuenv
-- source meuenv/bin/activate
-- pip install -r requirements.txt
-Então, executar o servidor:
-- ```flask --debug --app rinha run```, onde "products" é o nome do arquivo .py.# rinha-backend-2.0
+Lançar o ambiente de teste:
+    $ pip3 install virtualenv
+    $ virtualenv meuenv
+    $ source meuenv/bin/activate
+    $ pip install -r requirements.txt
+    Então, executar o servidor:
+    $ flask --debug --app rinha run
 
+Lançar o banco: 
+    $ docker-compose up
+    $ psql -U root -h 127.0.0.1 -d rinhadb
 
+Testar a aplicação local: 
 
 curl -X POST \
   http://localhost:5000/products \
