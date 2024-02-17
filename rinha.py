@@ -18,11 +18,15 @@ def home():
 @app.route('/clientes/<int:id>/transacoes', methods=['POST'])
 def transacao(id):
 
-    # Falta ver se os campos requeridos tem comprimento zero ou comprimento fora dos limites.
-
     # Get data from request body
     data = request.get_json()  
     print(f"Id={id}")
+
+    # Primeiro tratamos todos os parâmetros da função
+    # tratando id 
+    if id < 1:
+        print(f'Id={id} precisa ser inteiro positivo.')
+        return f'Id={id} precisa ser inteiro positivo.\n', 439
 
     # Get valor
     if "valor" in data:
@@ -62,45 +66,9 @@ def transacao(id):
         print("Descricao não fornecida")
         return f'Descricao faltando\n', 435
         
-    # valor = data["valor"]
-    # tipo = data["tipo"]
-    # descricao = data["descricao"]
-    
-    # The code must handle if the json variable does not contain a key "valorextra"
-    # if not data["valorextra"]:
-    #     print("valorextra não encontrado")  
+    # Falta codificar a fu
 
-    # if "valorextra" in data:
-    #     valorextra = data["valorextra"]
-    #     print(f"Valorextra={tipo_value}")
-    # else:
-    #     print("Valorextra nao fornecido")
-
-
-    # valorextra = data["valorextra"]
-
-    # print( f'Recebido id={id}\ntipo={tipo}\nvalor={valor}\ndescricao={descricao}\n' )
-    # print(mesg)
-
-    # Todos os campos são obrigatórios.
-    # if not valor or not tipo or not descricao:
-    #     return "Todos os campos são obrigatórios.", 400
-    
-
-    # return "Post " + id
-    # ms="Posteee"+str(id)
-    # print(ms)
-    # return ms, 202
     return f'Recebido {id}, tipo {tipo}, valor {valor}, descricao {descricao}.\n', 201
-
-
-    # # Compor resposta
-    # dicts = [
-    #     {'id': '2', 'name': 'Joaozinho'}
-    # ]
-    # response_json = json.dumps(dicts)
-    # return response_json, 200
-
 
 # quando a request chama no caminho /products
 @app.route('/products', methods=['GET'])

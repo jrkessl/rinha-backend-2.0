@@ -271,3 +271,39 @@ else
     echo "success"
 fi 
 
+# precisa falhar - id não é inteiro positivo 
+test=29
+res=$(curl -X POST http://localhost:5000/clientes/0/transacoes -H 'Content-Type: application/json' -d '{ "tipo": "d", "valor": 20 }' -s -o /dev/null -w "%{http_code}")
+if [[ $res -gt 199 && $res -lt 300 ]]; then 
+    echo "failure test $test, result $res"
+else
+    echo "success test $test, result $res"
+fi 
+
+# precisa falhar - id não é inteiro positivo 
+test=30
+res=$(curl -X POST http://localhost:5000/clientes/-1/transacoes -H 'Content-Type: application/json' -d '{ "tipo": "d", "valor": 20 }' -s -o /dev/null -w "%{http_code}")
+if [[ $res -gt 199 && $res -lt 300 ]]; then 
+    echo "failure test $test, result $res"
+else
+    echo "success test $test, result $res"
+fi 
+
+# precisa falhar - id não é inteiro 
+test=31
+res=$(curl -X POST http://localhost:5000/clientes/3.1/transacoes -H 'Content-Type: application/json' -d '{ "tipo": "d", "valor": 20 }' -s -o /dev/null -w "%{http_code}")
+if [[ $res -gt 199 && $res -lt 300 ]]; then 
+    echo "failure test $test, result $res"
+else
+    echo "success test $test, result $res"
+fi 
+
+# precisa falhar - id não é inteiro 
+test=32
+res=$(curl -X POST http://localhost:5000/clientes/a/transacoes -H 'Content-Type: application/json' -d '{ "tipo": "d", "valor": 20 }' -s -o /dev/null -w "%{http_code}")
+if [[ $res -gt 199 && $res -lt 300 ]]; then 
+    echo "failure test $test, result $res"
+else
+    echo "success test $test, result $res"
+fi 
+
