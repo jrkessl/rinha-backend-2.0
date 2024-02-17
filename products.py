@@ -13,7 +13,7 @@ if __name__ == "__main__":
 # quando a request chama na raiz 
 @app.route("/")
 def home():
-    return "Hello, this is a Flask Microservice"
+    return "Hello world"
 
 # quando a request chama no caminho /products
 @app.route('/products', methods=['GET'])
