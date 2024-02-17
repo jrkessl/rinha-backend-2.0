@@ -27,6 +27,12 @@ def transacao(id):
     # Get valor
     if "valor" in data:
         valor = data["valor"]
+        if not isinstance(valor, int):
+            print(f'Valor={valor} não é um número inteiro')
+            return f'Valor={valor} não é um número inteiro.\n', 436
+        if valor < 1:
+            print(f'Valor={valor} precisa ser inteiro positivo.')
+            return f'Valor={valor} precisa ser inteiro positivo.\n', 434
         print(f"Valor={valor}")
     else:
         print("Valor não fornecido")
@@ -35,6 +41,10 @@ def transacao(id):
     # Get tipo
     if "tipo" in data:
         tipo = data["tipo"]
+        # Fail if tipo is not equal to 'c' neither 'd'
+        if tipo != 'c' and tipo != 'd':
+            print(f'Tipo={tipo} não é c ou d')
+            return f'Tipo={tipo} não é c ou d.\n', 437
         print(f"Tipo={tipo}")
     else:
         print("Tipo não fornecido")
@@ -43,6 +53,10 @@ def transacao(id):
     # Get descricao
     if "descricao" in data:
         descricao = data["descricao"]
+        # Fail if the lenght of descricao is zero or more than 10
+        if len(descricao) == 0 or len(descricao) > 10:
+            print(f'Descricao={descricao} tem comprimento zero ou mais que 10')
+            return f'Descricao={descricao} tem comprimento zero ou mais que 10.\n', 438
         print(f"Descricao={descricao}")
     else:
         print("Descricao não fornecida")

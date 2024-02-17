@@ -21,6 +21,7 @@ curl -X POST \
   -H 'Content-Type: application/json' \
   -d '{
     "tipo": "d",
-    "valor": 20,
+    "valor": 20.1,
     "descricao": "abcd"
   }' -w "%{http_code}"
+
