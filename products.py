@@ -4,7 +4,7 @@ import requests
 import os
 import sys
 import json
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 app = Flask(__name__)
 port = int(os.environ.get('PORT', 5000))
 if __name__ == "__main__":
@@ -29,17 +29,12 @@ def get_products():
 @app.route('/products', methods=['POST'])
 def create_product():
     print("hello world")
-    # dicts = [
-    #     {'id': '2', 'name': 'POST aqui'}
-    # ]
-    # response_json = json.dumps(dicts)
-    # return response_json, 200
 
     # Get data from request body
     data = request.get_json()  
 
     # Process data
-    return jsonify(data), 201
+    return jsonify(data), 200
 
 # curl -X POST \
 #   http://localhost:5000/products \
