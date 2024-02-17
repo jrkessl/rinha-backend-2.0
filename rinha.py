@@ -28,7 +28,7 @@ def transacao(id):
         print(f'Id={id} precisa ser inteiro positivo.')
         return f'Id={id} precisa ser inteiro positivo.\n', 439
 
-    # Get valor
+    # tratando valor
     if "valor" in data:
         valor = data["valor"]
         if not isinstance(valor, int):
@@ -42,7 +42,7 @@ def transacao(id):
         print("Valor não fornecido")
         return f'Valor faltando\n', 432
     
-    # Get tipo
+    # tratando tipo
     if "tipo" in data:
         tipo = data["tipo"]
         # Fail if tipo is not equal to 'c' neither 'd'
@@ -54,7 +54,7 @@ def transacao(id):
         print("Tipo não fornecido")
         return f'Tipo faltando\n', 433
     
-    # Get descricao
+    # tratando descricao
     if "descricao" in data:
         descricao = data["descricao"]
         # Fail if the lenght of descricao is zero or more than 10
@@ -66,9 +66,30 @@ def transacao(id):
         print("Descricao não fornecida")
         return f'Descricao faltando\n', 435
         
-    # Falta codificar a fu
+    # Falta codificar a função
+    # Compor resposta
+    dicts = [
+        {'limite': '999', 'saldo': '999'}
+    ]
+    response_json = json.dumps(dicts)
+    return response_json, 200
 
-    return f'Recebido {id}, tipo {tipo}, valor {valor}, descricao {descricao}.\n', 201
+    # return f'Recebido {id}, tipo {tipo}, valor {valor}, descricao {descricao}.\n', 201
+
+@app.route('/clientes/<int:id>/extrato', methods=['GET'])
+def extrato(id):
+    # Primeiro tratamos todos os parâmetros da função
+    # tratando id 
+    if id < 1:
+        print(f'Id={id} precisa ser inteiro positivo.')
+        return f'Id={id} precisa ser inteiro positivo.\n', 439
+
+    # Compor resposta
+    dicts = [
+        {'limite': '999', 'saldo': '999'}
+    ]
+    response_json = json.dumps(dicts)
+    return response_json, 200
 
 # quando a request chama no caminho /products
 @app.route('/products', methods=['GET'])
