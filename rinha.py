@@ -5,6 +5,7 @@ import os
 import sys
 import json
 from flask import Flask, jsonify, request
+import psycopg
 app = Flask(__name__)
 port = int(os.environ.get('PORT', 5000))
 if __name__ == "__main__":
@@ -84,9 +85,27 @@ def extrato(id):
         print(f'Id={id} precisa ser inteiro positivo.')
         return f'Id={id} precisa ser inteiro positivo.\n', 439
 
+    # Processando a função
+    # Connect to database
+    print(1)
+    with psycopg.connect('postgresql://root:1234@localhost:5432/rinhadb', autocommit = False) as conn:
+        # Open a cursor to perform database operations
+        print(2)
+        with conn.cursor() as cur:
+            # Query the database and obtain data as Python objects.
+            print(3)
+            cur.execute("select saldo, limite from clientes where id = %s", (id,))
+            print(4)
+            if cur.rowcount == 0:
+                print(f'Id={id} não localizado no banco.')
+                return f'Id={id} não localizado no banco.\n', 440
+            else:
+                saldo, limite = cur.fetchone()
+                print(f'Id={id} tem saldo {saldo}.')
+    
     # Compor resposta
     saldo = [
-        {'total': '999', 'data': 'aaaaa', 'limite': '999'}
+        {'total': saldo, 'data': 'aaaaa', 'limite': limite}
     ]
     transacao1 = [
         {'valor': '999', 'tipo': 'c', 'descricao': 'aaaaa', 'realizada_em': 'aaaaa'}
