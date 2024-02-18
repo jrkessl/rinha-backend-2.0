@@ -23,7 +23,7 @@ def transacao(id):
     data = request.get_json()  
     print(f"Id={id}")
 
-    # Primeiro tratamos todos os parâmetros da função
+    # 1) Tratamos todos os parâmetros da função
     # tratando id 
     if id < 1:
         print(f'Id={id} precisa ser inteiro positivo.')
@@ -67,21 +67,39 @@ def transacao(id):
         print("Descricao não fornecida")
         return f'Descricao faltando\n', 435
         
-    # Falta codificar a função
+    # 2) Pegar o saldo e limite do cliente 
     with psycopg.connect('postgresql://root:1234@localhost:5432/rinhadb', autocommit = False) as conn:
-        # Open a cursor to perform database operations
-        # print(2)
-        with conn.cursor() as cur:
-            # Query the database and obtain data as Python objects.
-            # print(3)
-            # cur.execute("select saldo, limite from clientes where id = %s", (id,))
-            # insert into transacoes ( id, valor, tipo, description, realizada_em ) values ( 1, 998, 'd', 'abcd', CURRENT_TIMESTAMP );
+        with conn.cursor() as cur: # Open a cursor to perform database operations
+            cur.execute("select saldo, limite from clientes where id = %s", (id,))
+            if cur.rowcount == 0:
+                print(f'Id={id} não localizado no banco.')
+                return f'Id={id} não localizado no banco.\n', 441
+            else:
+                saldo, limite = cur.fetchone()
+                print(f'Id={id} até então tem saldo {saldo}.')
+            # cur.close()
 
+    # 3) Testar consistência do saldo e limite do cliente
+            if tipo == 'd':
+                if saldo - valor < (limite * -1):
+                    print(f'Limite excedido. Com débito de {valor}, novo saldo {saldo-valor} excederia limite atual de {limite}.')
+                    dicts = [
+                        {'erro': f'Limite excedido. Com débito de {valor}, novo saldo {saldo-valor} excederia limite atual de {limite}.\n' }
+                    ]
+                    response_json = json.dumps(dicts)
+                    return response_json, 442
+
+    # 4) Comittar a transação no banco 
             cur.execute(
                 "insert into transacoes ( id, valor, tipo, description, realizada_em ) values ( %s, %s, %s, %s, CURRENT_TIMESTAMP )", 
                 (id, valor, tipo, descricao))
-
-            print(f'cur.rowcount={cur.rowcount}')
+            novosaldo=0
+            if tipo == 'd':
+                novosaldo = saldo - valor
+            else:
+                novosaldo = saldo + valor
+            cur.execute("update clientes set saldo = %s where id = %s", (novosaldo, id))
+            # print(f'cur.rowcount={cur.rowcount}')
             conn.commit()
 
             # return f'Transação inserida\n', 200
@@ -95,7 +113,7 @@ def transacao(id):
 
     # Compor resposta
     dicts = [
-        {'limite': 'TRANSACAO INSERIDA', 'saldo': '999'}
+        {'limite': limite, 'saldo': novosaldo}
     ]
     response_json = json.dumps(dicts)
     return response_json, 200
