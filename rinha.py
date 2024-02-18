@@ -68,9 +68,34 @@ def transacao(id):
         return f'Descricao faltando\n', 435
         
     # Falta codificar a função
+    with psycopg.connect('postgresql://root:1234@localhost:5432/rinhadb', autocommit = False) as conn:
+        # Open a cursor to perform database operations
+        # print(2)
+        with conn.cursor() as cur:
+            # Query the database and obtain data as Python objects.
+            # print(3)
+            # cur.execute("select saldo, limite from clientes where id = %s", (id,))
+            # insert into transacoes ( id, valor, tipo, description, realizada_em ) values ( 1, 998, 'd', 'abcd', CURRENT_TIMESTAMP );
+
+            cur.execute(
+                "insert into transacoes ( id, valor, tipo, description, realizada_em ) values ( %s, %s, %s, %s, CURRENT_TIMESTAMP )", 
+                (id, valor, tipo, descricao))
+
+            print(f'cur.rowcount={cur.rowcount}')
+            conn.commit()
+
+            # return f'Transação inserida\n', 200
+
+            # if cur.rowcount == 0:
+            #     print(f'Id={id} não localizado no banco.')
+            #     return f'Id={id} não localizado no banco.\n', 440
+            # else:
+            #     saldo, limite = cur.fetchone()
+            #     print(f'Id={id} tem saldo {saldo}.')
+
     # Compor resposta
     dicts = [
-        {'limite': '999', 'saldo': '999'}
+        {'limite': 'TRANSACAO INSERIDA', 'saldo': '999'}
     ]
     response_json = json.dumps(dicts)
     return response_json, 200
