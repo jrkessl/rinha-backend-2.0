@@ -22,8 +22,7 @@ CREATE TABLE transacoes (
     valor INTEGER NOT NULL,
     tipo CHAR(1) CHECK (tipo IN ('c', 'd')) NOT NULL,
     description VARCHAR(10),
-    realizada_em TIMESTAMPTZ NOT NULL,
-    PRIMARY KEY (id)
+    realizada_em TIMESTAMPTZ NOT NULL
 );
 CREATE INDEX idx_realizada_em ON transacoes (realizada_em);
 
