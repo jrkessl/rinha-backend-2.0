@@ -102,6 +102,8 @@ def extrato(id):
             else:
                 saldo, limite = cur.fetchone()
                 print(f'Id={id} tem saldo {saldo}.')
+
+    # Só tá pegando o saldo. Precisa pegar as 10 últimas transações.
     
     # Compor resposta
     saldo = [
