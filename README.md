@@ -1,15 +1,19 @@
-Lançar o ambiente de teste:
-    $ pip3 install virtualenv
-    $ virtualenv meuenv
-    $ source meuenv/bin/activate
-    $ pip install -r requirements.txt
-    Então, executar o servidor:
-    $ flask --debug --app rinha run
+# Como inicializar e trabalhar
+## Subir o banco 
+1. ``` docker compose up```
+## Subir a aplicação 
+1. ```pip3 install virtualenv```
+2. ```virtualenv meuenv ```
+3. ```source meuenv/bin/activate```
+4. ```pip install -r requirements.txt```
+5. ```flask --debug --app rinha run```
+## Popular banco 
+Rodar manualmente script de população em db-init.sql 
+## Rodar bateria de testes 
+```./testes.sh```
 
-Lançar o banco: 
-    $ docker-compose up
-    $ psql -U root -h 127.0.0.1 -d rinhadb
-
+# Comandos úteis
+```psql -U root -h 127.0.0.1 -d rinhadb```
 Testar a aplicação local: 
 
 curl -X POST \
