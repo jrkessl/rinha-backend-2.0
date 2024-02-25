@@ -1,14 +1,31 @@
 #!/bin/bash 
 set -e 
 
+# Primeiro, testar se a aplicação está ouvindo.
+YES=0
+nc localhost 5000 -w 2 || YES=1
+if [[ $YES -eq 1 ]]; then
+    echo "Aplicação não está ouvindo"
+    exit 1
+fi 
+
+# Testar API de transações 
+echo "1"
 # precisa passar - caso comum 
 res=$(curl -X POST http://localhost:5000/clientes/3/transacoes -H 'Content-Type: application/json' -d '{ "tipo": "d", "valor": 20, "descricao": "abcd" }' -s -o /dev/null -w "%{http_code}")
+echo "2"
 echo $res
+echo "3"
 if [[ $res -gt 199 && $res -lt 300 ]]; then 
+    echo "4"
     echo "success"
 else
+    echo "5"
     echo "failure test 1"
 fi 
+echo "6"
+
+echo "hello2"
 
 # precisa passar - caso comum, d
 res=$(curl -X POST http://localhost:5000/clientes/3/transacoes -H 'Content-Type: application/json' -d '{ "tipo": "c", "valor": 20, "descricao": "abcd" }' -s -o /dev/null -w "%{http_code}")
@@ -162,6 +179,7 @@ if [[ $res -gt 199 && $res -lt 300 ]]; then
 else
     echo "failure test 17"
 fi 
+# exit 0
 
 # precisa passar, testando valores altos
 res=$(curl -X POST http://localhost:5000/clientes/3/transacoes -H 'Content-Type: application/json' -d '{ "tipo": "c", "valor": 100000000000, "descricao": "abcd" }' -s -o /dev/null -w "%{http_code}")

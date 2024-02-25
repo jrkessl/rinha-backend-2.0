@@ -1,5 +1,3 @@
-# origem do tutorial: https://kinsta.com/blog/python-microservices/
-
 import requests
 import os
 import sys
