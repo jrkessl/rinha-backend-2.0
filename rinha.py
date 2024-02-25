@@ -147,17 +147,17 @@ def extrato(id):
     # Só tá pegando o saldo. Precisa pegar as 10 últimas transações.
     
     # Compor resposta
-    saldo = [
-        {'total': saldo, 'data': 'aaaaa', 'limite': limite}
+    saldo = {'total': saldo, 'data': 'aaaaa', 'limite': limite}
+    transacao1 = {'valor': '999', 'tipo': 'c', 'descricao': 'aaaaa', 'realizada_em': 'aaaaa'}
+    transacao2 = {'valor': '998', 'tipo': 'c', 'descricao': 'bbbbb', 'realizada_em': 'bbbbb'}
+    dict_transacoes = [
+        transacao1,
+        transacao2
     ]
-    transacao1 = [
-        {'valor': '999', 'tipo': 'c', 'descricao': 'aaaaa', 'realizada_em': 'aaaaa'}
-    ]
-    final_dict = [
-        saldo,
-        transacao1
-    ]
-    response_json = json.dumps(final_dict)
+    response_json = {
+        "saldo": saldo,
+        "ultimas_transacoes": [transacao1, transacao2]
+    }
     return response_json, 200
 
 # # quando a request chama no caminho /products
