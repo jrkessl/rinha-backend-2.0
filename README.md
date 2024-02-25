@@ -65,5 +65,7 @@ column 5: name: "id". This is a foreign key to table "clientes" on field "id".
 There should be indexes on columns "id" and "realizada_em". 
 
 Features a adicionar:
+  - método extratos está listando os extratos na resposta por ordem do mais recente? 
+  - método extratos está respondendo a quantidade de extratos; mas o conteúdo da resposta está correto? 
   - achar uma forma de, quando subir, popular o banco, ou o banco já estar populado.
   - adotar um número para o saldo que seja maior do que integer.
