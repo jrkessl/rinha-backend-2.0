@@ -120,64 +120,59 @@ def transacao(id):
 
 @app.route('/clientes/<int:id>/extrato', methods=['GET'])
 def extrato(id):
-    # Primeiro tratamos todos os parâmetros da função
-    # tratando id 
+    # Primeiro tratamos o parâmetro da função, o id
     if id < 1:
         print(f'Id={id} precisa ser inteiro positivo.')
         return f'Id={id} precisa ser inteiro positivo.\n', 439
 
-    # Processando a função
-    # Connect to database
-    print(1)
+    # Então, pegamos o saldo do cliente 
     with psycopg.connect('postgresql://root:1234@localhost:5432/rinhadb', autocommit = False) as conn:
         # Open a cursor to perform database operations
-        print(2)
         with conn.cursor() as cur:
             # Query the database and obtain data as Python objects.
-            print(3)
             cur.execute("select saldo, limite from clientes where id = %s", (id,))
-            print(4)
             if cur.rowcount == 0:
-                print(f'Id={id} não localizado no banco.')
-                return f'Id={id} não localizado no banco.\n', 440
+                print(f'Cliente Id={id} não existe.')
+                return f'Cliente Id={id} não existe.\n', 445
             else:
                 saldo, limite = cur.fetchone()
                 print(f'Id={id} tem saldo {saldo}.')
 
-    # Só tá pegando o saldo. Precisa pegar as 10 últimas transações.
-    
-    # Compor resposta
+
+    # Depois, as últimas 10 transações 
+            cur.execute("select valor, tipo, description, realizada_em from transacoes where id = %s order by realizada_em desc LIMIT 10", (id,))
+            dict_transacoes = []
+            while True:
+                row = cur.fetchone()
+                # print(f'cur.rowcount == {cur.rowcount}.')
+
+                if row is None:
+                    break
+                # process row
+                valor, tipo, description, realizada_em = row
+                transacaon = {'valor': valor, 'tipo': tipo, 'descricao': description, 'realizada_em': realizada_em}
+                print(f'Valor={valor}, tipo={tipo}, description={description}, realizada_em={realizada_em}.')
+                dict_transacoes.append(transacaon)
+                print(f'Transação adicionada no dicionário.')
+                                    
+                if cur.rowcount == 0:
+                    break
+            
+            # print(f'Id={id} listei as transações.')
+            # return f'Id={id} listei as transações.\n', 444
+            cur.close()
+        conn.close()
+                
+    # E mandamos a resposta. 
     saldo = {'total': saldo, 'data': 'aaaaa', 'limite': limite}
-    transacao1 = {'valor': '999', 'tipo': 'c', 'descricao': 'aaaaa', 'realizada_em': 'aaaaa'}
-    transacao2 = {'valor': '998', 'tipo': 'c', 'descricao': 'bbbbb', 'realizada_em': 'bbbbb'}
-    dict_transacoes = [
-        transacao1,
-        transacao2
-    ]
+    # transacao1 = {'valor': '999', 'tipo': 'c', 'descricao': 'aaaaa', 'realizada_em': 'aaaaa'}
+    # transacao2 = {'valor': '998', 'tipo': 'c', 'descricao': 'bbbbb', 'realizada_em': 'bbbbb'}
+    # dict_transacoes = [
+    #     transacao1,
+    #     transacao2
+    # ]
     response_json = {
         "saldo": saldo,
-        "ultimas_transacoes": [transacao1, transacao2]
+        "ultimas_transacoes": dict_transacoes
     }
     return response_json, 200
-
-# # quando a request chama no caminho /products
-# @app.route('/products', methods=['GET'])
-# def get_products():
-
-#     # Compor resposta
-#     dicts = [
-#         {'id': '2', 'name': 'Joaozinho'}
-#     ]
-#     response_json = json.dumps(dicts)
-#     return response_json, 200
-
-# @app.route('/products', methods=['POST'])
-# def create_product():
-#     print("hello world")
-
-#     # Get data from request body
-#     data = request.get_json()  
-
-#     # Process data
-#     return jsonify(data), 200
-
