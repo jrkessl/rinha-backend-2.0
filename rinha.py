@@ -7,15 +7,47 @@ import psycopg
 app = Flask(__name__)
 port = int(os.environ.get('PORT', 5000))
 if __name__ == "__main__":
+    print(f'olo mundo')
     app.run(debug=True, host="0.0.0.0", port=port)
+
+def inicializar_db():
+    # Ver se a flag que indica que o banco já foi inicializado já foi setada
+    ja_inicializei = app.config.get('JA_INICIALIZEI')
+    
+    if not ja_inicializei:
+        # Antes de inicializar o banco, verificar se as tabelas já existem
+        with psycopg.connect('postgresql://root:1234@localhost:5432/rinhadb', autocommit = False) as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT 1 as tot FROM information_schema.tables WHERE table_schema = %s AND table_type = %s AND table_name = %s", ('public', 'BASE TABLE', 'clientes'))
+                if cur.rowcount > 0: # Se maior que zero, tabela já existe 
+                    app.config.update(
+                        JA_INICIALIZEI=True
+                    )
+                    print(f'banco já havia sido inicializado numa execução anterior')
+                    cur.close()
+                    conn.close()
+                    return 0
+        # Então, inicializar o banco 
+            # Ler o arquivo com o script de inicialização
+            with open('./db-init.sql', 'r') as sql_file:
+                sql_script = sql_file.read()
+            conn.execute(sql_script)
+            conn.commit()
+            conn.close()
+        app.config.update(
+            JA_INICIALIZEI=True
+        )
 
 # quando a request chama na raiz 
 @app.route("/")
 def home():
-    return "Hello world"
+    inicializar_db()
+
+    return f'olá mundo'
 
 @app.route('/clientes/<int:id>/transacoes', methods=['POST'])
 def transacao(id):
+    inicializar_db()
 
     # Get data from request body
     data = request.get_json()  
@@ -120,6 +152,8 @@ def transacao(id):
 
 @app.route('/clientes/<int:id>/extrato', methods=['GET'])
 def extrato(id):
+    inicializar_db()
+
     # Primeiro tratamos o parâmetro da função, o id
     if id < 1:
         print(f'Id={id} precisa ser inteiro positivo.')
