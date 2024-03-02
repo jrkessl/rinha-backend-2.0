@@ -19,6 +19,30 @@ Rodar manualmente script de população em db-init.sql
 ```clear; curl -s -X POST http://localhost:5000/clientes/1/transacoes -H 'Content-Type: application/json' -d '{"tipo": "d", "valor": 20, "descricao": "abcd" }' -w "%{http_code}" | jq . ```
 #### Testar o extrato:
 ```clear; code=$(curl -s -X GET http://localhost:5000/clientes/1/extrato -H 'Content-Type: application/json' -w "%{http_code}" -o body) && echo "resposta=$code" && cat body | jq . ```
+## Configurando o nginx 
+1. Instalar o gunicorn (ver arquivo requirements.txt)
+2. Desabilitar o apache (se houver conflito de porta) ```sudo service apache2 stop```
+3. Iniciar o gunicorn ```gunicorn --bind 0.0.0.0:8001 -w 1 'wsgi:app'```
+4. Adicionar o bloco "server" na config do nxing ```/etc/nginx/nginx.conf``` aninhado dentro do bloco ```http```
+```
+	server {
+		listen 6001;
+		server_name _;
+
+		location / {
+			proxy_pass http://127.0.0.1:8001/;
+			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_set_header X-Forwarded-Proto $scheme;
+			proxy_set_header X-Forwarded-Host $host;
+			proxy_set_header X-Forwarded-Prefix /;
+		}
+	}	
+```
+5. Testar a config do nginx ```sudo nginx -t```
+6. Talvez dar um reload no nginx ```sudo systemctl reload nginx```
+
+
+
 ## Comandos úteis
 
 ```psql -U root -h 127.0.0.1 -d rinhadb```
@@ -53,30 +77,23 @@ Testar o extrato:
 Para ver se os códigos de erro no programa são únicos:
   cat rinha.py | grep -Eo -- '4[0-9]{2}' | sort
 
-
-Considering this table:
-
-CREATE TABLE clientes (
-    id SERIAL PRIMARY KEY,
-    saldo INTEGER NOT NULL DEFAULT 0,
-    limite INTEGER NOT NULL DEFAULT 0
-);
-
-Write a SQL statement to run in a Postgresql database that will create a table like this:
-table name: transacoes
-column 1: name: "valor"; type: integer; no default value; cannot be null.
-column 2: name: "tipo"; type: string, size 1 character; only "c" and "d" values will be accepted; no default value; cannot be null;
-column 3: name: "description", type: string, size 10 characters; no default value;
-column 4: name: "realizada_em", type: date. 
-column 5: name: "id". This is a foreign key to table "clientes" on field "id". 
-
-There should be indexes on columns "id" and "realizada_em". 
-
 Features a adicionar:
-  - achar uma forma de, quando subir, popular o banco, ou o banco já estar populado.
   - colocar tudo atrás de um servidor WSGI e proxy reverso
   - método extratos está listando os extratos na resposta por ordem do mais recente? 
   - método extratos está respondendo a quantidade de extratos; mas o conteúdo da resposta está correto? 
   - implementar o logger. https://flask.palletsprojects.com/en/3.0.x/quickstart/#logging
   
-  
+guia do indiano:
+  iniciar o gunicorn:
+    gunicorn --bind 0.0.0.0:5001 wsgi:app
+  iniciar o gunicorn com o bind do diretório:
+    gunicorn --workers 3 --bind unix:/home/juliano/Documents/github/rinhabackend2.0.sock -m 777 wsgi:app
+
+guia do flask mesmo:
+  iniciar o gunicorn:
+    gunicorn -w 1 'wsgi:app'
+
+ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/  
+sudo ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/
+sudo nginx -t
+

@@ -23,7 +23,6 @@ def inicializar_db():
                     app.config.update(
                         JA_INICIALIZEI=True
                     )
-                    print(f'banco já havia sido inicializado numa execução anterior')
                     cur.close()
                     conn.close()
                     return 0
