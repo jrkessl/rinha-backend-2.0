@@ -1,18 +1,26 @@
-# Como inicializar e trabalhar
-## Subir o banco 
-1. ``` docker compose up```
-## Subir a aplicação 
-1. ```pip3 install virtualenv```
-2. ```virtualenv meuenv ```
-3. ```source meuenv/bin/activate```
-4. ```pip install -r requirements.txt```
-5. ```flask --debug --app rinha run```
-## Popular banco 
-Rodar manualmente script de população em db-init.sql 
-## Rodar bateria de testes 
-```./testes.sh```
+# Rinha 2.0, exercício do Juliano
 
-# Comandos úteis
+## Como inicializar e trabalhar
+
+### Subir o banco
+1.  ``` docker compose up```
+### Popular banco
+Rodar manualmente script de população em db-init.sql
+### Subir a aplicação
+1.  ```pip3 install virtualenv```
+2.  ```virtualenv meuenv ```
+3.  ```source meuenv/bin/activate```
+4.  ```pip install -r requirements.txt```
+5.  ```flask --debug --app rinha run```
+### Rodar bateria de testes
+```./testes.sh```
+### Testar endpoints
+#### Testar transações:
+```clear; curl -s -X POST http://localhost:5000/clientes/1/transacoes -H 'Content-Type: application/json' -d '{"tipo": "d", "valor": 20, "descricao": "abcd" }' -w "%{http_code}" | jq . ```
+#### Testar o extrato:
+```clear; code=$(curl -s -X GET http://localhost:5000/clientes/1/extrato -H 'Content-Type: application/json' -w "%{http_code}" -o body) && echo "resposta=$code" && cat body | jq . ```
+## Comandos úteis
+
 ```psql -U root -h 127.0.0.1 -d rinhadb```
 Testar a aplicação local: 
 
@@ -68,4 +76,4 @@ Features a adicionar:
   - método extratos está listando os extratos na resposta por ordem do mais recente? 
   - método extratos está respondendo a quantidade de extratos; mas o conteúdo da resposta está correto? 
   - achar uma forma de, quando subir, popular o banco, ou o banco já estar populado.
-  - adotar um número para o saldo que seja maior do que integer.
+  
