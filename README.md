@@ -2,6 +2,7 @@
 ## Como trabalhar com a versão do docker-compose
 1. Dar build na imagem (não esquecer de fazer push para o docker hub). ```docker build . -t jrkessl/rinha-backend-2.0```
 2. ```docker-compose down && docker-compose up```
+3. Rodar testes de desempenho: ```./testes-carga.sh```
 ## Como trabalhar com a versão local, servidor nginx
 ### Subir o banco
 1.  ``` docker compose up```
