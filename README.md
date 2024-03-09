@@ -11,7 +11,7 @@ Rodar manualmente script de população em db-init.sql
 2.  ```virtualenv meuenv ```
 3.  ```source meuenv/bin/activate```
 4.  ```pip install -r requirements.txt```
-5.  ```flask --debug --app rinha run```
+5.  ```flask --debug run```
 ### Rodar bateria de testes
 ```./testes.sh```
 ### Testar endpoints
