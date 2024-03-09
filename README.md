@@ -1,12 +1,13 @@
 # Rinha 2.0, exercício do Juliano
 
-## Como inicializar e trabalhar
+  
 
+## Como trabalhar com a versão local, servidor nginx
 ### Subir o banco
 1.  ``` docker compose up```
 ### Popular banco
-Rodar manualmente script de população em db-init.sql
-### Subir a aplicação
+Não é necessário; a app vai popular automaticamente na primeira execução usando os script do arquivo ```db-init.sql```
+### Subir a aplicação localmente
 1.  ```pip3 install virtualenv```
 2.  ```virtualenv meuenv ```
 3.  ```source meuenv/bin/activate```
@@ -15,35 +16,41 @@ Rodar manualmente script de população em db-init.sql
 ### Rodar bateria de testes
 ```./testes.sh```
 ### Testar endpoints
-#### Testar transações:
+#### Transações:
 ```clear; curl -s -X POST http://localhost:5000/clientes/1/transacoes -H 'Content-Type: application/json' -d '{"tipo": "d", "valor": 20, "descricao": "abcd" }' -w "%{http_code}" | jq . ```
-#### Testar o extrato:
+#### Extrato:
 ```clear; code=$(curl -s -X GET http://localhost:5000/clientes/1/extrato -H 'Content-Type: application/json' -w "%{http_code}" -o body) && echo "resposta=$code" && cat body | jq . ```
-## Configurando o nginx 
+
+## Como trabalhar com a versão local, servidor nginx
 1. Instalar o gunicorn (ver arquivo requirements.txt)
 2. Desabilitar o apache (se houver conflito de porta) ```sudo service apache2 stop```
 3. Iniciar o gunicorn ```gunicorn --bind 0.0.0.0:8001 -w 1 'wsgi:app'```
 4. Adicionar o bloco "server" na config do nxing ```/etc/nginx/nginx.conf``` aninhado dentro do bloco ```http```
 ```
-	server {
-		listen 6001;
-		server_name _;
-
-		location / {
-			proxy_pass http://127.0.0.1:8001/;
-			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-			proxy_set_header X-Forwarded-Proto $scheme;
-			proxy_set_header X-Forwarded-Host $host;
-			proxy_set_header X-Forwarded-Prefix /;
-		}
-	}	
+  server {
+    listen 6001;
+    server_name _;
+    location / {
+      proxy_pass http://127.0.0.1:8001/;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header X-Forwarded-Host $host;
+      proxy_set_header X-Forwarded-Prefix /;
+    }
+  }
 ```
+
 5. Testar a config do nginx ```sudo nginx -t```
-6. Talvez dar um reload no nginx ```sudo systemctl reload nginx```
+6. Iniciar o nginx ```sudo systemctl start nginx```
+7. Talvez dar um reload no nginx ```sudo systemctl reload nginx```
+8. Começar a usar o novo endpoint; fazer consultas na porta onde o nginx foi configurado pra ouvir (bloco "server" dentro do bloco "http" do arquivo ```/etc/nginx/nginx.conf```)
 
+  
+  
+  
 
-
-## Comandos úteis
+## Bloco de notas
+Aqui é só anotações úteis livres, e não uma documentação estruturada.
 
 ```psql -U root -h 127.0.0.1 -d rinhadb```
 Testar a aplicação local: 
