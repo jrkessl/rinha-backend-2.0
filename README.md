@@ -1,7 +1,7 @@
 # Rinha 2.0, exercício do Juliano
-
-  
-
+## Como trabalhar com a versão do docker-compose
+1. Dar build na imagem (não esquecer de fazer push para o docker hub). ```docker build . -t jrkessl/rinha-backend-2.0```
+2. ```docker-compose down && docker-compose up```
 ## Como trabalhar com a versão local, servidor nginx
 ### Subir o banco
 1.  ``` docker compose up```
@@ -39,16 +39,10 @@ Não é necessário; a app vai popular automaticamente na primeira execução us
     }
   }
 ```
-
 5. Testar a config do nginx ```sudo nginx -t```
 6. Iniciar o nginx ```sudo systemctl start nginx```
 7. Talvez dar um reload no nginx ```sudo systemctl reload nginx```
 8. Começar a usar o novo endpoint; fazer consultas na porta onde o nginx foi configurado pra ouvir (bloco "server" dentro do bloco "http" do arquivo ```/etc/nginx/nginx.conf```)
-
-  
-  
-  
-
 ## Bloco de notas
 Aqui é só anotações úteis livres, e não uma documentação estruturada.
 
@@ -86,6 +80,9 @@ Para ver se os códigos de erro no programa são únicos:
 
 Features a adicionar:
   - colocar tudo atrás de um servidor WSGI e proxy reverso
+    - colocar 2 web servers. 
+    - informar o flask que ele está atrás de um proxy reverso.
+    - testar mais gunicorn runners em cada instância web.
   - método extratos está listando os extratos na resposta por ordem do mais recente? 
   - método extratos está respondendo a quantidade de extratos; mas o conteúdo da resposta está correto? 
   - implementar o logger. https://flask.palletsprojects.com/en/3.0.x/quickstart/#logging

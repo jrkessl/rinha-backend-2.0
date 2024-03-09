@@ -6,6 +6,8 @@ from flask import Flask, jsonify, request
 import psycopg
 app = Flask(__name__)
 port = int(os.environ.get('PORT', 5000))
+database_host = os.environ.get('DATABASE_HOST','localhost')
+connection_string = f"postgresql://root:1234@{database_host}:5432/rinhadb"
 if __name__ == "__main__":
     print(f'olo mundo')
     app.run(debug=True, host="0.0.0.0", port=port)
@@ -16,7 +18,7 @@ def inicializar_db():
     
     if not ja_inicializei:
         # Antes de inicializar o banco, verificar se as tabelas já existem
-        with psycopg.connect('postgresql://root:1234@localhost:5432/rinhadb', autocommit = False) as conn:
+        with psycopg.connect(connection_string, autocommit = False) as conn:
             with conn.cursor() as cur:
                 cur.execute("SELECT 1 as tot FROM information_schema.tables WHERE table_schema = %s AND table_type = %s AND table_name = %s", ('public', 'BASE TABLE', 'clientes'))
                 if cur.rowcount > 0: # Se maior que zero, tabela já existe 
@@ -97,7 +99,7 @@ def transacao(id):
         return f'Descricao faltando\n', 435
         
     # 2) Pegar o saldo e limite do cliente 
-    with psycopg.connect('postgresql://root:1234@localhost:5432/rinhadb', autocommit = False) as conn:
+    with psycopg.connect(connection_string, autocommit = False) as conn:
         with conn.cursor() as cur: # Open a cursor to perform database operations
             cur.execute("select saldo, limite from clientes where id = %s", (id,))
             if cur.rowcount == 0:
@@ -159,7 +161,7 @@ def extrato(id):
         return f'Id={id} precisa ser inteiro positivo.\n', 439
 
     # Então, pegamos o saldo do cliente 
-    with psycopg.connect('postgresql://root:1234@localhost:5432/rinhadb', autocommit = False) as conn:
+    with psycopg.connect(connection_string, autocommit = False) as conn:
         # Open a cursor to perform database operations
         with conn.cursor() as cur:
             # Query the database and obtain data as Python objects.
