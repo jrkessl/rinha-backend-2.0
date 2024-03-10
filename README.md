@@ -85,10 +85,9 @@ Para ver se os códigos de erro no programa são únicos:
   cat rinha.py | grep -Eo -- '4[0-9]{2}' | sort
 
 Features a adicionar:
+  - falta implementar a data na resposta do extrato.
   - colocar tudo atrás de um servidor WSGI e proxy reverso
-    - colocar 2 web servers. 
     - informar o flask que ele está atrás de um proxy reverso.
-    - testar mais gunicorn runners em cada instância web.
   - método extratos está listando os extratos na resposta por ordem do mais recente? 
   - método extratos está respondendo a quantidade de extratos; mas o conteúdo da resposta está correto? 
   - implementar classes. Pois a app só responde uma chamada por vez. Talvez com classes ela tome chamadas de forma concorrente.
@@ -110,3 +109,4 @@ sudo ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/
 sudo nginx -t
 
 1 web 1 worker - 21/20
+2 web 1 worker - 10/9/8
