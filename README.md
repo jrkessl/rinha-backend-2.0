@@ -102,3 +102,4 @@ ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/
 sudo ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/
 sudo nginx -t
 
+1 web 2 workers - 40s 
