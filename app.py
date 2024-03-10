@@ -188,10 +188,10 @@ def extrato(id):
                     break
                 # process row
                 valor, tipo, description, realizada_em = row
-                transacaon = {'valor': valor, 'tipo': tipo, 'descricao': description, 'realizada_em': realizada_em}
-                print(f'Valor={valor}, tipo={tipo}, description={description}, realizada_em={realizada_em}.')
+                transacaon = {'valor': valor, 'tipo': tipo, 'descricao': description, 'realizada_em': realizada_em.strftime("%Y-%m-%dT%H:%M:%S.%fZ")}
+                # print(f'Valor={valor}, tipo={tipo}, description={description}, realizada_em={realizada_em}.')
                 dict_transacoes.append(transacaon)
-                print(f'Transação adicionada no dicionário.')
+                # print(f'Transação adicionada no dicionário.')
                                     
                 if cur.rowcount == 0:
                     break
@@ -202,7 +202,7 @@ def extrato(id):
         conn.close()
                 
     # E mandamos a resposta. 
-    saldo = {'total': saldo, 'data': 'aaaaa', 'limite': limite}
+    saldo = {'total': saldo, 'data': realizada_em.strftime("%Y-%m-%dT%H:%M:%S.%fZ"), 'limite': limite}
     # transacao1 = {'valor': '999', 'tipo': 'c', 'descricao': 'aaaaa', 'realizada_em': 'aaaaa'}
     # transacao2 = {'valor': '998', 'tipo': 'c', 'descricao': 'bbbbb', 'realizada_em': 'bbbbb'}
     # dict_transacoes = [
