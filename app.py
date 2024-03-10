@@ -4,6 +4,7 @@ import sys
 import json
 from flask import Flask, jsonify, request
 import psycopg
+import time
 app = Flask(__name__)
 port = int(os.environ.get('PORT', 5000))
 database_host = os.environ.get('DATABASE_HOST','localhost')
@@ -154,6 +155,8 @@ def transacao(id):
 @app.route('/clientes/<int:id>/extrato', methods=['GET'])
 def extrato(id):
     inicializar_db()
+
+    # time.sleep(3)
 
     # Primeiro tratamos o parâmetro da função, o id
     if id < 1:

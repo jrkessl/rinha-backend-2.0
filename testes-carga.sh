@@ -5,11 +5,17 @@ export endereco=localhost
 export porta=9999
 export quant=300
 
+echo "1"
+
 # Warm up
-if [[ ! $(curl -s -X GET http://${endereco}:${porta}/clientes/1/extrato -H 'Content-Type: application/json' -w "%{http_code}" -o /tmp/body1) -eq 200 ]]; then 
-    echo "Erro no teste de warmup. Confira o resultado em /tmp/body"
+res=$(curl -s -X GET http://${endereco}:${porta}/clientes/1/extrato -H 'Content-Type: application/json' -w "%{http_code}" -o /tmp/body)
+echo "2"
+if [[ ! $res -eq 200 ]]; then 
+    echo "Erro no teste de warmup. Retorno código ${res}."
+    cat /tmp/body
     exit 1
 fi 
+echo "3"
 
 
 

@@ -1,8 +1,13 @@
 # Rinha 2.0, exercício do Juliano
 ## Como trabalhar com a versão do docker-compose
 1. Dar build na imagem (não esquecer de fazer push para o docker hub). ```docker build . -t jrkessl/rinha-backend-2.0```
-2. ```docker-compose down && docker-compose up```
+2. ```docker-compose down && docker-compose up --abort-on-container-exit```
 3. Rodar testes de desempenho: ```./testes-carga.sh```
+4. Rodar testes manuais:
+Transações:  
+```clear; curl -s -X POST http://localhost:9999/clientes/1/transacoes -H 'Content-Type: application/json' -d '{"tipo": "d", "valor": 20, "descricao": "abcd" }' -w "%{http_code}" | jq . ```
+Extrato:  
+```clear; code=$(curl -s -X GET http://localhost:9999/clientes/1/extrato -H 'Content-Type: application/json' -w "%{http_code}" -o body) && echo "resposta=$code" && cat body | jq . ```
 ## Como trabalhar com a versão local, servidor nginx
 ### Subir o banco
 1.  ``` docker compose up```
@@ -86,7 +91,9 @@ Features a adicionar:
     - testar mais gunicorn runners em cada instância web.
   - método extratos está listando os extratos na resposta por ordem do mais recente? 
   - método extratos está respondendo a quantidade de extratos; mas o conteúdo da resposta está correto? 
+  - implementar classes. Pois a app só responde uma chamada por vez. Talvez com classes ela tome chamadas de forma concorrente.
   - implementar o logger. https://flask.palletsprojects.com/en/3.0.x/quickstart/#logging
+
   
 guia do indiano:
   iniciar o gunicorn:
@@ -102,4 +109,4 @@ ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/
 sudo ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/
 sudo nginx -t
 
-1 web 2 workers - 40s 
+1 web 1 worker - 21/20

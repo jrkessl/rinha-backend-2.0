@@ -41,17 +41,15 @@ services:
           memory: '0.5GB'  
     depends_on:
       - web1
-      # - web2
+      - web2
 
   web1:
     image: jrkessl/rinha-backend-2.0:latest
     environment:
-      # POSTGRES_USER: root
-      # POSTGRES_PASSWORD: 1234 
       DATABASE_HOST: db
-      workers: 4
-    ports: 
-      - "8001:8001"
+      workers: 1
+    expose: 
+      - "8001"
     depends_on:
       - db      
     deploy:
@@ -59,6 +57,33 @@ services:
         limits:
           cpus: '0.4'
           memory: '150MB'
+
+  web2:
+    image: jrkessl/rinha-backend-2.0:latest
+    environment:
+      DATABASE_HOST: db
+      workers: 1
+    expose: 
+      - "8001"
+    depends_on:
+      - db      
+    deploy:
+      resources:
+        limits:
+          cpus: '0.4'
+          memory: '150MB'
+
+  aux01: # API - Instância 01
+    image: ubuntu
+    hostname: aux01
+    command: sleep infinity
+
+  # Instale essas coisas no aux01 pra facilitar:
+      #  apt-get install curl  -y 
+      #  apt install netcat -y
+      #  apt-get install dnsutils -y
+  # logar no container com:
+  # docker exec -it rinhabackend20_aux01_1 bash
 
 networks:
   default:
