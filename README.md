@@ -1,4 +1,8 @@
 # Rinha 2.0, exercício do Juliano
+Este é a submissão do Juliano Kessler para o exercício da [Rinha de Backend 2.0](https://github.com/zanfranceschi/rinha-de-backend-2024-q1).  
+Sei que não vou ganhar, mas fiz pelo aprendizado mesmo. Foi a primeira vez que escrevi um microserviço REST, primeira vez que trabalhei com JSON em Python, nunca nem tinha ouvido falar em servidor WSGI. 
+Tecnologias: Nginx, que aponta para middleware WSGI Gunicorn, que aponta para uma aplicação Python/Flask. Banco Postgresql. 
+[Repositório original](https://github.com/jrkessl/rinha-backend-2.0)
 ## Como trabalhar com a versão do docker-compose
 1. Dar build na imagem (não esquecer de fazer push para o docker hub). ```docker build . -t jrkessl/rinha-backend-2.0```
 2. ```docker-compose down && docker-compose up --abort-on-container-exit```
@@ -49,64 +53,9 @@ Não é necessário; a app vai popular automaticamente na primeira execução us
 6. Iniciar o nginx ```sudo systemctl start nginx```
 7. Talvez dar um reload no nginx ```sudo systemctl reload nginx```
 8. Começar a usar o novo endpoint; fazer consultas na porta onde o nginx foi configurado pra ouvir (bloco "server" dentro do bloco "http" do arquivo ```/etc/nginx/nginx.conf```)
+## Backlog de funcionalidades a adicionar
+ - informar o flask que ele está atrás de um proxy reverso (precisa mesmo?)
+ - implementar classes. Pois a app só responde uma chamada por vez. Talvez com classes ela tome chamadas de forma concorrente.
+ - implementar o logger. https://flask.palletsprojects.com/en/3.0.x/quickstart/#logging
 ## Bloco de notas
 Aqui é só anotações úteis livres, e não uma documentação estruturada.
-
-```psql -U root -h 127.0.0.1 -d rinhadb```
-Testar a aplicação local: 
-
-curl -X POST \
-  http://localhost:5000/products \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "name": "Sample Product",
-    "price": 29.99
-  }' -w "%{http_code}"
-
-curl -X POST \
-  http://localhost:5000/clientes/3/transacoes \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "tipo": "d",
-    "valor": 20.1,
-    "descricao": "abcd"
-  }' -w "%{http_code}"
-
-testar transações:
-    clear; curl -s -X POST http://localhost:5000/clientes/1/transacoes -H 'Content-Type: application/json' -d '{"tipo": "d", "valor": 20, "descricao": "abcd" }' -w "%{http_code}" | jq . 
-
-Testar o extrato: 
-    code=$(curl -s -X GET http://localhost:5000/clientes/1/extrato -H 'Content-Type: application/json' -w "%{http_code}" -o body) && echo "resposta=$code" && cat body | jq . 
-    métodos velhos:
-      clear; curl -s -X GET http://localhost:5000/clientes/1/extrato -H 'Content-Type: application/json' -w "%{http_code}" | jq . 
-      alias e="clear; curl -s -X GET http://localhost:5000/clientes/1/extrato -H 'Content-Type: application/json' -w \"%{http_code}\" | jq . "
-
-Para ver se os códigos de erro no programa são únicos:
-  cat rinha.py | grep -Eo -- '4[0-9]{2}' | sort
-
-Features a adicionar:
-  - falta implementar a data na resposta do extrato.
-  - colocar tudo atrás de um servidor WSGI e proxy reverso
-    - informar o flask que ele está atrás de um proxy reverso.
-  - método extratos está listando os extratos na resposta por ordem do mais recente? 
-  - método extratos está respondendo a quantidade de extratos; mas o conteúdo da resposta está correto? 
-  - implementar classes. Pois a app só responde uma chamada por vez. Talvez com classes ela tome chamadas de forma concorrente.
-  - implementar o logger. https://flask.palletsprojects.com/en/3.0.x/quickstart/#logging
-
-  
-guia do indiano:
-  iniciar o gunicorn:
-    gunicorn --bind 0.0.0.0:5001 wsgi:app
-  iniciar o gunicorn com o bind do diretório:
-    gunicorn --workers 3 --bind unix:/home/juliano/Documents/github/rinhabackend2.0.sock -m 777 wsgi:app
-
-guia do flask mesmo:
-  iniciar o gunicorn:
-    gunicorn -w 1 'wsgi:app'
-
-ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/  
-sudo ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/
-sudo nginx -t
-
-1 web 1 worker - 21/20
-2 web 1 worker - 10/9/8

@@ -73,10 +73,10 @@ services:
           cpus: '0.4'
           memory: '150MB'
 
-  aux01: # API - Instância 01
-    image: ubuntu
-    hostname: aux01
-    command: sleep infinity
+  # aux01: # API - Instância 01
+  #   image: ubuntu
+  #   hostname: aux01
+  #   command: sleep infinity
 
   # Instale essas coisas no aux01 pra facilitar:
       #  apt-get install curl  -y 
