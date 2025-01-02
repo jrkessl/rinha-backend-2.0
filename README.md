@@ -1,3 +1,16 @@
+# Notas
+rodar a app:
+
+```
+python3 -m venv venv0 # (uma vez só)
+source venv0/bin/activate
+python -m pip install -r requirements.txt
+flask --debug run
+```
+
+
+flask --app app run
+
 # Rinha 2.0, exercício do Juliano
 Este é a submissão do Juliano Kessler para o exercício da [Rinha de Backend 2.0](https://github.com/zanfranceschi/rinha-de-backend-2024-q1).  
 Sei que não vou ganhar, mas fiz pelo aprendizado mesmo. Foi a primeira vez que escrevi um microserviço REST, primeira vez que trabalhei com JSON em Python, nunca nem tinha ouvido falar em servidor WSGI. 

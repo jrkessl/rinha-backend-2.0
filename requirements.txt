@@ -1,4 +1,4 @@
 flask
-requests
-psycopg
-gunicorn
+# requests
+# psycopg
+# gunicorn
