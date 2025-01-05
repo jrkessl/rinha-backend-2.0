@@ -1,21 +1,27 @@
 # Notes
-Run the app: 
-
+## Simplest
+### Run the app: 
 ```
 python3 -m venv venv0 # (just once)
 source venv0/bin/activate
 python -m pip install -r requirements.txt
-flask --debug run -p 8080
+flask --debug --app simplest.py run -p 8080
 ```
-
-Test the app:
-
+### Test the app:
 ```
 curl localhost:8080/sleep
 curl localhost:8080/business
 ```
+### Build app image:
+```
+docker build . -f Dockerfile-simplest -t jrkessl/probes:simplest
+docker push jrkessl/probes:simplest
+```
+### Deploy app in cluster:
+```
+kubectl create deployment simplest --image jrkessl/probes:simplest
+```
 
-flask --app app run
 
 # Rinha 2.0, exercício do Juliano
 Este é a submissão do Juliano Kessler para o exercício da [Rinha de Backend 2.0](https://github.com/zanfranceschi/rinha-de-backend-2024-q1).  
