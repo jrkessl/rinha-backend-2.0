@@ -1,13 +1,19 @@
-# Notas
-rodar a app:
+# Notes
+Run the app: 
 
 ```
-python3 -m venv venv0 # (uma vez só)
+python3 -m venv venv0 # (just once)
 source venv0/bin/activate
 python -m pip install -r requirements.txt
-flask --debug run
+flask --debug run -p 8080
 ```
 
+Test the app:
+
+```
+curl localhost:8080/sleep
+curl localhost:8080/business
+```
 
 flask --app app run
 

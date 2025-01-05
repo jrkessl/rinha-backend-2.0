@@ -7,10 +7,10 @@ from threading import Lock
 
 app = Flask(__name__)
 lock = Lock()
-port = int(os.environ.get('PORT', 5000)) # port where the Flask app will listen
+
 if __name__ == "__main__":
     print(f'Hello world')
-    app.run(debug=True, host="0.0.0.0", port=port, threaded=False)
+    app.run(debug=True, host="0.0.0.0")
 
 
 
