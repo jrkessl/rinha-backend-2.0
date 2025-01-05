@@ -3,11 +3,16 @@ import sys
 import json
 from flask import Flask, jsonify, request
 import time
+from threading import Lock
+
 app = Flask(__name__)
+lock = Lock()
 port = int(os.environ.get('PORT', 5000)) # port where the Flask app will listen
 if __name__ == "__main__":
-    print(f'olo mundo')
-    app.run(debug=True, host="0.0.0.0", port=port)
+    print(f'Hello world')
+    app.run(debug=True, host="0.0.0.0", port=port, threaded=False)
+
+
 
 def inicializar_db():
     # Ver se a flag que indica que o banco já foi inicializado já foi setada
@@ -45,7 +50,8 @@ def home():
 
 @app.route('/business', methods=['GET'])
 def business():
-    inicializar_db()
+    with lock:
+        inicializar_db()
 
     # Compor resposta
     # dicts = [
@@ -57,6 +63,12 @@ def business():
     return "yesss", 200
 
     # return f'Recebido {id}, tipo {tipo}, valor {valor}, descricao {descricao}.\n', 201
+
+@app.route('/sleep', methods=['GET'])
+def sleep():
+    with lock:
+        time.sleep(5)
+    return "done sleeping", 200
 
 # @app.route('/clientes/<int:id>/transacoes', methods=['POST'])
 # def transacao(id):
