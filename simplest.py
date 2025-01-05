@@ -15,3 +15,10 @@ if __name__ == "__main__":
 @app.route('/business', methods=['GET'])
 def business():
     return "business request completed", 200
+
+@app.route('/crash', methods=['GET'])
+def crash():
+    os._exit(1)
+    return "lala", 501
+
+
