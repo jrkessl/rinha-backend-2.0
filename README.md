@@ -72,3 +72,13 @@ Não é necessário; a app vai popular automaticamente na primeira execução us
  - implementar o logger. https://flask.palletsprojects.com/en/3.0.x/quickstart/#logging
 ## Bloco de notas
 Aqui é só anotações úteis livres, e não uma documentação estruturada.
+
+
+horários?
+outra vaga? 
+  release eng > 1 pm to 10 pm 
+  sre >         1 pm to 10 pm 
+quntas pessoas?
+  400 > 
+  70  > 
+  amanda > desde 2022 

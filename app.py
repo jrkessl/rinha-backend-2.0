@@ -43,6 +43,21 @@ def home():
 
     return f'olá mundo'
 
+@app.route('/business', methods=['GET'])
+def business():
+    inicializar_db()
+
+    # Compor resposta
+    # dicts = [
+    #     {'limite': 1, 'saldo': 1}
+    # ]
+    # response_json = json.dumps(dicts)
+    # return response_json, 200
+
+    return "yesss", 200
+
+    # return f'Recebido {id}, tipo {tipo}, valor {valor}, descricao {descricao}.\n', 201
+
 # @app.route('/clientes/<int:id>/transacoes', methods=['POST'])
 # def transacao(id):
 #     inicializar_db()
